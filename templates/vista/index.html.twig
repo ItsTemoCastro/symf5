@@ -1,0 +1,386 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello VistaController!
+{% endblock %}
+
+{% block body %}
+	<style>
+        .container-all{
+            width:100%;
+            height: 100vh;
+        }
+        .carousel-item{
+            height: 100vh;
+            background-repeat: no-repeat;
+            background-position:center;
+            background-size: cover;
+        }
+        .carousel-item-layer{
+            height: 100vh;
+            backdrop-filter: blur(3px);
+            background-color: rgba(0,0,0,0.3);
+        }
+        .carousel-item-title{
+            text-align: center;
+            color: #fff;
+        }
+        .carousel-button{
+            width:auto;
+            height:auto;
+            padding: 10px 20px;
+            background:#f36e03;
+            border-radius: 25px;
+            text-decoration:none;
+            color: #fff;
+        }
+        .section-2{
+            width:100%;
+            height: 100vh;
+        }
+	</style>
+
+	<div class="container-all">
+		<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-indicators">
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+				<button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+			</div>
+			<div class="carousel-inner">
+				<div class="carousel-item active" style="background-image:url({{asset('img/yacht_01.jpg')}});">
+                    <div class="carousel-item-layer d-flex align-items-center">
+                        <div class="container d-flex flex-column align-items-center">
+                            <h1 class="carousel-item-title">"It's about you, Our client"</h1>
+                            <a href="#" class="carousel-button mt-4">Get your Quote!</a>
+                        </div>
+                    </div>
+				</div>
+				<div class="carousel-item" style="background-image:url({{asset('img/slider_01.jpg')}});">
+					<div class="carousel-item-layer d-flex align-items-center">
+                        <div class="container d-flex flex-column align-items-center">
+                            <h1 class="carousel-item-title">Client focused insurance solutions since 1987</h1>
+                            <a href="#" class="carousel-button mt-4">Get a Quote!</a>
+                        </div>
+                    </div>
+				</div>
+				<div class="carousel-item" style="background-image:url({{asset('img/slider_02.jpg')}});">
+					<div class="carousel-item-layer d-flex align-items-center">
+                        <div class="container d-flex flex-column align-items-center">
+                            <h1 class="carousel-item-title">Friendly and experienced staff in all Novamar offices</h1>
+                            <a href="#" class="carousel-button mt-4">Get a Quote!</a>
+                        </div>
+                    </div>
+				</div>
+				<div class="carousel-item" style="background-image:url({{asset('img/$__sailboat2.jpg')}});">
+					<div class="carousel-item-layer d-flex align-items-center">
+                        <div class="container d-flex flex-column align-items-center">
+                            <h1 class="carousel-item-title">Call, e-mail or visit us to experience the Novamar Difference </h1>
+                            <a href="#" class="carousel-button mt-4">Get a Quote!</a>
+                        </div>
+                    </div>
+				</div>
+				<div class="carousel-item" style="background-image:url({{asset('img/medical-evacuation.jpg')}});">
+					<div class="carousel-item-layer d-flex align-items-center">
+                        <div class="container d-flex flex-column align-items-center">
+                            <h1 class="carousel-item-title">Not just to the nearest hospital should you have an accident, illness or disease </h1>
+                            <a href="#" class="carousel-button mt-4">Get your Quote!</a>
+                        </div>
+                    </div>
+				</div>
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+        <div class="section-2">
+            <div id="app">
+                <div class="container mt-4">
+                    <div class="div-con-v-for" v-for="(product, key, index) in fields.products" :key="product[key]" :id="'container-' + index">
+                        <div class="card m-2">
+                            <div class="card-body d-flex" :id="'insured-product-' + key">
+                                <p>insured product: [[key]] [[index + 1]]</p><br><br>
+                                <div class="card-body" v-for="(item, i) in product" :key="item[i]" :id="'content-insured-item-' + i">
+                                    <p>poliza: [[item.details.poliza]]</p>
+                                    <p>vigencia: [[item.details.vigencia]]</p>  
+                                    <p v-if="key == 'HO'">direccion: [[item.details.direccion]]</p>  
+                                    <p v-if="key == 'BL'">tamaño: [[item.details.tamano]]</p>  
+                                    <div class="botones d-flex">
+                                        <button type="button" class="btn btn-light btn-sm m-2" @click="verDetallePoliza(item.details, key, i)">Ver detalles</button>
+                                        <button type="button" class="btn btn-light btn-sm m-2" @click="verHistorialPolizas(item.historialPolizas, key, i)">Ver polizas</button>
+                                    </div>
+                                    <!-- Modal Details-->
+                                    <div class="modal fade" :id="'ver-detalles-modal' + key + i" tabindex="-1" aria-labelledby="ver-detalles-modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ver-detalles-modalLabel">[[key]] modal details for [[item.details.poliza]]</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="content-data" v-if="key == 'HO'">
+                                              <h4>Hola home</h4>
+                                              <div class="row">
+                                              <div class="col-lg-6">
+                                                <label for="first-result">poliza</label>
+                                                <input type="text" class="form-control" :value="[[item.details.poliza]]">
+                                              </div>
+                                              <div class="col-lg-6"></div>
+                                            </div>
+                                            </div>
+                                            <div class="content-data" v-if="key == 'BL'">
+                                              <h4>Hola bote</h4>
+                                              <div class="row">
+                                              <div class="col-lg-6">
+                                                <label for="first-result">poliza</label>
+                                                <input type="text" class="form-control" :value="[[item.details.poliza]]">
+                                              </div>
+                                              <div class="col-lg-6"></div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    {# end modal details #}
+                                    <!-- Modal policies-->
+                                    <div class="modal fade" :id="'ver-policies-modal' + key + i" tabindex="-1" aria-labelledby="ver-policies-modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="ver-policies-modalLabel">[[key]] modal Policies for [[item.details.poliza]]</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="content-data" v-if="key == 'HO'">
+                                              <h4>Active policy</h4>
+                                              <div class="row">
+                                                <div class="col-lg-6">
+                                                  <label for="first-result">Policy type/Paquete:</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.paquete]]">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                  <label for="first-result">Lienholder/Beneficiary:</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.beneficiario]]">
+                                                </div>
+                                              </div>
+                                              <div class="row">
+                                                <div class="col-lg-12">
+                                                  <label for="first-result">Lienholder address:</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.direccionBeneficiario]]">
+                                                </div>
+                                                <div class="col-lg-12">
+                                                  <label for="first-result">Policy Term</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.vigencia]]">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                  <label for="first-result">Days Coverage:</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.diasCobertura]]">
+                                                </div>
+                                              </div>
+                                              <a href="#" class="btn btn-primary btn-sm m-2">View policy</a>
+                                              <div class="old-policies-list card">
+                                                  <ul>
+                                                    <li v-for="(oldItemPolicy, oldPolicyI) in item.historialPolizas.anteriores" :key="oldItemPolicy[oldPolicyI]">
+                                                      <div class="card-body">
+                                                        <p>poliza: [[oldItemPolicy.poliza]]</p>
+                                                        <p>vigencia: [[oldItemPolicy.vigencia]]</p>
+                                                        <a href="#" class="btn btn-light btn-sm m-2">View policy</a>
+                                                      </div>
+                                                    </li>
+                                                  </ul>
+                                                </div>
+                                            </div>
+                                            <div class="content-data" v-if="key == 'BL'">
+                                              <h4>Active policy</h4>
+                                              <div class="row">
+                                                <div class="col-lg-6">
+                                                  <label for="first-result">Policy type/Paquete:</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.paquete]]">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                  <label for="first-result">Lienholder/Beneficiary:</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.beneficiario]]">
+                                                </div>
+                                              </div>
+                                              <div class="row">
+                                                <div class="col-lg-12">
+                                                  <label for="first-result">Lienholder address:</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.direccionBeneficiario]]">
+                                                </div>
+                                                <div class="col-lg-12">
+                                                  <label for="first-result">Policy Term</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.vigencia]]">
+                                                </div>
+                                                <div class="col-lg-6">
+                                                  <label for="first-result">Days Coverage:</label>
+                                                  <input type="text" class="form-control" :value="[[item.historialPolizas.activa.diasCobertura]]">
+                                                </div>
+                                              </div>
+                                              <a href="#" class="btn btn-primary btn-sm m-2">View policy</a>
+                                              <div class="old-policies-list card">
+                                                  <ul>
+                                                    <li v-for="(oldItemPolicy, oldPolicyI) in item.historialPolizas.anteriores" :key="oldItemPolicy[oldPolicyI]">
+                                                      <div class="card-body">
+                                                        <p>poliza: [[oldItemPolicy.poliza]]</p>
+                                                        <p>vigencia: [[oldItemPolicy.vigencia]]</p>
+                                                        <a href="#" class="btn btn-light btn-sm m-2">View policy</a>
+                                                      </div>
+                                                    </li>
+                                                  </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                    {# end modal policies #}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+{% endblock %}
+{% block javascript %}
+{{ parent() }}
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+$(document).ready(function(){
+    let products={
+  "HO": [
+    {
+      "details": {
+        "poliza": "mx2435446",
+        "vigencia": "del 15 al 30 de abril 2022",
+        "direccion": "corea del sur 627",
+        "valor": "100,000 usd",
+        "colonia": "lomas del coapinole ",
+        "Municipio": "puerto vallarta ",
+        "ciudad": "puerto vallarta ",
+        "estado": "jalisco ",
+      },
+      "historialPolizas": {
+        "activa": {
+          "poliza": "mx2435446",
+          "paquete": "Standard Coverage",
+          "beneficiario": "Cuauhtemoc castro alonso",
+          "direccionBeneficiario": "corea del sur 627, lomas del coapinole, puerto vallarta",
+          "diasCobertura": "13",
+          "vigencia": "FROM/ DESDE 00:00:01 DEL 05/07/2022 TO/ HASTA 00:00:01 DEL 05/20/2022"
+        },
+        "anteriores": [
+          {
+            "poliza": "mx2435445",
+            "vigencia": "del 15 al 30 de marzo 2022"
+          },
+          {
+            "poliza": "mx2435445",
+            "vigencia": "del 15 al 28 de febrero 2022"
+          }
+        ]
+      }
+    },
+    {
+      "details": {
+        "poliza": "ho2435446",
+        "vigencia": "del 15 al 30 de abril 2022",
+        "direccion": "corea del sur 627"
+      },
+      "historialPolizas": {
+        "activa": {
+          "poliza": "ho2435446",
+          "paquete": "Standard Coverage",
+          "beneficiario": "Cuauhtemoc castro alonso",
+          "direccionBeneficiario": "corea del sur 627, lomas del coapinole, puerto vallarta",
+          "diasCobertura": "13",
+          "vigencia": "FROM/ DESDE 00:00:01 DEL 05/07/2022 TO/ HASTA 00:00:01 DEL 05/20/2022"
+        },
+        "anteriores": [
+          {
+            "poliza": "h02435445",
+            "vigencia": "del 15 al 30 de marzo 2022"
+          },
+          {
+            "poliza": "ho2435445",
+            "vigencia": "del 15 al 28 de febrero 2022"
+          }
+        ]
+      }
+    }
+  ],
+  "BL": [
+    {
+      "details": {
+        "poliza": "bl2435446",
+        "vigencia": "del 15 al 30 de abril 2022",
+        "tamano": "77 metros",
+        "marca": "Burgess",
+        "modelo": "BurgessXLPremium",
+        "capacidad": "18 invitados, 18 tripulantes",
+        "valor": "79.5 millones de euros",
+      },
+      "historialPolizas": {
+        "activa": {
+          "poliza": "bl2435446",
+          "paquete": "Standard Coverage",
+          "beneficiario": "Cuauhtemoc castro alonso",
+          "direccionBeneficiario": "corea del sur 627, lomas del coapinole, puerto vallarta",
+          "diasCobertura": "13",
+          "vigencia": "FROM/ DESDE 00:00:01 DEL 05/07/2022 TO/ HASTA 00:00:01 DEL 05/20/2022"
+
+        },
+        "anteriores": [
+          {
+            "poliza": "bl2435445",
+            "vigencia": "del 15 al 30 de marzo 2022"
+          },
+          {
+            "poliza": "bl2435445",
+            "vigencia": "del 15 al 28 de febrero 2022"
+          }
+        ]
+      }
+    }
+  ]
+}
+    new Vue({
+          el: '#app',
+          delimiters: ['[[', ']]'],
+          data:{
+              fields:{
+                  products: products
+              }
+          },
+          methods:{
+            verDetallePoliza: function(data, product, index){
+              let modal = '#ver-detalles-modal' + product + index;
+              console.log(modal);
+              $(modal).modal('show')
+            },
+            verHistorialPolizas: function(data, product, index){
+              let modal = '#ver-policies-modal' + product + index;
+              console.log(modal);
+              $(modal).modal('show')
+            }
+          }
+        })
+})
+    </script>
+{% endblock %}
